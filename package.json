@@ -5,8 +5,9 @@
   },
   "type": "commonjs",
   "scripts": {
+    "buildrun":"npm run build && node ./dist/index.js",
     "dev": "nodemon --exec ts-node index.ts",
-    "build":"npx tsc index.ts --outdir ./dist"
+    "build":"npx tsc *.ts --outdir ./dist"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

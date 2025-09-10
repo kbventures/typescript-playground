@@ -1,29 +1,117 @@
-var ListNode = /** @class */ (function () {
-    function ListNode(val, next) {
-        this.val = (val === undefined ? 0 : val);
-        this.next = (next === undefined ? null : next);
-    }
-    return ListNode;
-}());
-// Time complexity is O(n) because we traverse the nodes a single time and space complexity is O(1) because we using exisiting references and not new space in memory
-function mergeTwoLists(list1, list2) {
-    // If one of the lists is null, return the other list since there's nothing to merge
-    if (list1 === null || list2 === null) {
-        return list1 || list2;
-    }
-    // Compare the values of the two list heads and recursively merge the rest of the lists
-    if (list1.val < list2.val) {
-        // If the value of the first list head is less,
-        // link that node to the result of merging the rest of the lists
-        list1.next = mergeTwoLists(list1.next, list2);
-        return list1;
-    }
-    else {
-        // If the value of the second list head is less or equal,
-        // link that node to the result of merging the rest of the lists
-        list2.next = mergeTwoLists(list1, list2.next);
-        return list2;
-    }
-}
-var result = mergeTwoLists(null, null);
-console.log(result);
+// Implement singly linked list
+var LinkedListStackNameSpace;
+(function (LinkedListStackNameSpace) {
+    var Node = /** @class */ (function () {
+        function Node(val) {
+            this.val = val;
+            this.next = null;
+        }
+        return Node;
+    }());
+    LinkedListStackNameSpace.Node = Node;
+    var SinglyLinketList = /** @class */ (function () {
+        function SinglyLinketList(head, size) {
+            if (head === void 0) { head = null; }
+            if (size === void 0) { size = 0; }
+            this.head = head;
+            this.size = size;
+        }
+        SinglyLinketList.prototype.add = function (val) {
+            var newNode = new Node(val);
+            if (!this.head) {
+                this.head = newNode;
+            }
+            else {
+                newNode.next = this.head;
+                this.head = newNode;
+            }
+            this.size++;
+        };
+        SinglyLinketList.prototype.delete = function () {
+            if (!this.head) {
+                return undefined;
+            }
+            {
+                this.head = this.head.next;
+            }
+            this.size--;
+        };
+        SinglyLinketList.prototype.peek = function () {
+            if (!this.head) {
+                return undefined;
+            }
+            else {
+                return this.head.val;
+            }
+        };
+        SinglyLinketList.prototype.length = function () {
+            if (!this.head) {
+                return undefined;
+            }
+            else {
+                return this.size;
+            }
+        };
+        SinglyLinketList.prototype.search = function (val) {
+            var tempHead = this.head;
+            while (tempHead) {
+                if (tempHead.val == val) {
+                    return true;
+                }
+                tempHead = tempHead.next;
+            }
+        };
+        SinglyLinketList.prototype.merge = function () { };
+        SinglyLinketList.prototype.reverse = function () { };
+        return SinglyLinketList;
+    }());
+    LinkedListStackNameSpace.SinglyLinketList = SinglyLinketList;
+})(LinkedListStackNameSpace || (LinkedListStackNameSpace = {}));
+var newLinkedList = new LinkedListStackNameSpace.SinglyLinketList();
+newLinkedList.add(0);
+newLinkedList.add(1);
+newLinkedList.add(2);
+console.dir(newLinkedList, { depth: 0 });
+newLinkedList.peek();
+newLinkedList.search(1);
+newLinkedList.length();
+var LinkedListQueueNameSpace;
+(function (LinkedListQueueNameSpace) {
+    var Node = /** @class */ (function () {
+        function Node(val) {
+            this.val = val;
+            this.next = null;
+        }
+        return Node;
+    }());
+    LinkedListQueueNameSpace.Node = Node;
+    var SinglyLinketList = /** @class */ (function () {
+        function SinglyLinketList(head, size) {
+            if (head === void 0) { head = null; }
+            if (size === void 0) { size = 0; }
+            this.head = head;
+            this.size = size;
+        }
+        SinglyLinketList.prototype.add = function (val) {
+            var newNode = new Node(val);
+            if (!this.head) {
+                this.head = newNode;
+            }
+            else {
+                this.head.next = newNode;
+            }
+            this.size++;
+        };
+        SinglyLinketList.prototype.delete = function () { };
+        SinglyLinketList.prototype.peek = function () { };
+        return SinglyLinketList;
+    }());
+    LinkedListQueueNameSpace.SinglyLinketList = SinglyLinketList;
+})(LinkedListQueueNameSpace || (LinkedListQueueNameSpace = {}));
+// A standard linked list class usually provides operations like: 
+//     Adding a node at the head or tail
+//     Deleting a node, 
+//     Searching for a value, 
+//     Reversing the list, 
+//     Finding the length, 
+//     Merging with another list
