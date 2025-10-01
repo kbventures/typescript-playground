@@ -1,117 +1,130 @@
-// Implement singly linked list
-var LinkedListStackNameSpace;
-(function (LinkedListStackNameSpace) {
+// Stack singly linked list
+var DoublyLinkedstList;
+(function (DoublyLinkedstList_1) {
     var Node = /** @class */ (function () {
-        function Node(val) {
-            this.val = val;
-            this.next = null;
+        function Node(val, next, prev) {
+            if (next === void 0) { next = null; }
+            if (prev === void 0) { prev = null; }
+            this.value = val;
+            this.next = next;
+            this.prev = prev;
         }
         return Node;
     }());
-    LinkedListStackNameSpace.Node = Node;
-    var SinglyLinketList = /** @class */ (function () {
-        function SinglyLinketList(head, size) {
-            if (head === void 0) { head = null; }
+    DoublyLinkedstList_1.Node = Node;
+    var DoublyLinkedstList = /** @class */ (function () {
+        function DoublyLinkedstList(start, end, size) {
+            if (start === void 0) { start = null; }
+            if (end === void 0) { end = null; }
             if (size === void 0) { size = 0; }
-            this.head = head;
+            this.start = start;
+            this.end = end;
             this.size = size;
         }
-        SinglyLinketList.prototype.add = function (val) {
+        DoublyLinkedstList.prototype.enqueue = function (val) {
             var newNode = new Node(val);
-            if (!this.head) {
-                this.head = newNode;
+            if (!this.start) {
+                this.start = newNode;
+                this.end = newNode;
             }
             else {
-                newNode.next = this.head;
-                this.head = newNode;
+                var temp = this.end;
+                this.end.next = newNode;
+                this.end = newNode;
+                this.end.prev = temp;
             }
             this.size++;
         };
-        SinglyLinketList.prototype.delete = function () {
-            if (!this.head) {
+        DoublyLinkedstList.prototype.dequeue = function () {
+            if (!this.start) {
                 return undefined;
             }
-            {
-                this.head = this.head.next;
+            else if (!this.start.next) {
+                var returnVal = this.start;
+                this.start = null;
+                this.end = null;
+                this.size = 0;
+                return returnVal;
             }
+            else {
+                var returnVal = this.start;
+                this.start = this.start.next;
+                this.start.prev = null;
+                this.size--;
+                return returnVal;
+            }
+        };
+        DoublyLinkedstList.prototype.peekStart = function (val) { };
+        DoublyLinkedstList.prototype.peekEnd = function () { };
+        // Move any node to the front
+        DoublyLinkedstList.prototype.MoveAnyNodeToFront = function (node) {
+            var result = this.RemoveSpecificNode(node);
+            if (!result)
+                return;
+            var temp = this.end;
+            this.end.next = node;
+            this.end = node;
+            node.prev = temp;
+        };
+        DoublyLinkedstList.prototype.RemoveSpecificNode = function (node) {
+            if (!node)
+                return undefined;
+            // Doubly linkedlist is empty
+            if (!this.start && !this.end) {
+                return undefined;
+            }
+            // One node left
+            if (this.start == node && this.end == node) {
+                this.start = null;
+                this.end = null;
+                this.size--;
+                return undefined;
+            }
+            if (this.start == node) {
+                var temp = this.start.next;
+                temp.prev = null;
+                this.start = temp;
+                this.size--;
+                return node;
+            }
+            if (this.end == node) {
+                var temp = this.end.prev;
+                this.end = temp;
+                this.size--;
+                return node;
+            }
+            var left = node.prev;
+            var right = node.next;
+            left.next = right;
+            right.prev = left;
             this.size--;
+            return node;
         };
-        SinglyLinketList.prototype.peek = function () {
-            if (!this.head) {
-                return undefined;
-            }
-            else {
-                return this.head.val;
-            }
-        };
-        SinglyLinketList.prototype.length = function () {
-            if (!this.head) {
-                return undefined;
-            }
-            else {
-                return this.size;
-            }
-        };
-        SinglyLinketList.prototype.search = function (val) {
-            var tempHead = this.head;
-            while (tempHead) {
-                if (tempHead.val == val) {
+        DoublyLinkedstList.prototype.searchNode = function (node) {
+            var temp = this.start;
+            while (temp) {
+                if (temp == node)
                     return true;
-                }
-                tempHead = tempHead.next;
+                temp = temp.next;
             }
+            return false;
         };
-        SinglyLinketList.prototype.merge = function () { };
-        SinglyLinketList.prototype.reverse = function () { };
-        return SinglyLinketList;
-    }());
-    LinkedListStackNameSpace.SinglyLinketList = SinglyLinketList;
-})(LinkedListStackNameSpace || (LinkedListStackNameSpace = {}));
-var newLinkedList = new LinkedListStackNameSpace.SinglyLinketList();
-newLinkedList.add(0);
-newLinkedList.add(1);
-newLinkedList.add(2);
-console.dir(newLinkedList, { depth: 0 });
-newLinkedList.peek();
-newLinkedList.search(1);
-newLinkedList.length();
-var LinkedListQueueNameSpace;
-(function (LinkedListQueueNameSpace) {
-    var Node = /** @class */ (function () {
-        function Node(val) {
-            this.val = val;
-            this.next = null;
-        }
-        return Node;
-    }());
-    LinkedListQueueNameSpace.Node = Node;
-    var SinglyLinketList = /** @class */ (function () {
-        function SinglyLinketList(head, size) {
-            if (head === void 0) { head = null; }
-            if (size === void 0) { size = 0; }
-            this.head = head;
-            this.size = size;
-        }
-        SinglyLinketList.prototype.add = function (val) {
-            var newNode = new Node(val);
-            if (!this.head) {
-                this.head = newNode;
+        DoublyLinkedstList.prototype.searchNodeValue = function (val) {
+            var temp = this.start;
+            while (temp) {
+                // node found
+                if (temp.value == val)
+                    return temp;
+                temp = temp.next;
             }
-            else {
-                this.head.next = newNode;
-            }
-            this.size++;
+            // Not found
+            return undefined;
         };
-        SinglyLinketList.prototype.delete = function () { };
-        SinglyLinketList.prototype.peek = function () { };
-        return SinglyLinketList;
+        return DoublyLinkedstList;
     }());
-    LinkedListQueueNameSpace.SinglyLinketList = SinglyLinketList;
-})(LinkedListQueueNameSpace || (LinkedListQueueNameSpace = {}));
-// A standard linked list class usually provides operations like: 
-//     Adding a node at the head or tail
-//     Deleting a node, 
-//     Searching for a value, 
-//     Reversing the list, 
-//     Finding the length, 
-//     Merging with another list
+    DoublyLinkedstList_1.DoublyLinkedstList = DoublyLinkedstList;
+})(DoublyLinkedstList || (DoublyLinkedstList = {}));
+// For the LeetCode LRU Cache, you absolutely need methods that support:
+// MoveAnyNodeToFront(node) → because when a key is accessed, its node must move to the head.
+// RemoveSpecificNode(node) → because when capacity is exceeded, you need to evict the least recently used node (tail).
+// Other helpers like searchByValue, searchNode, or peekStart/peekEnd are not strictly required if you manage nodes via a HashMap<Node>.
