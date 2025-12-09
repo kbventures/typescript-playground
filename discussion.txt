@@ -1,0 +1,15 @@
+
+
+
+R2 / S3
+
+ken.jpg
+
+/avatars/<uuid>.jpg
+
+R2 
+/avatars/<uuid>.jpg
+
+Filename
+1. in uploads table as a field
+2. if i want to have the same filename in R2

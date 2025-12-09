@@ -1,147 +1,103 @@
-// Stack singly linked list
-
-namespace DoublyLinkedstList{
+namespace DoublyLinkedList {
     export class Node {
-        next: Node | null;
-        prev: Node | null;
-        value: number; 
-        constructor(val:number, next = null, prev= null ){
-            this.value = val; 
-            this.next = next;
-            this.prev = prev; 
-        } 
+        value: number
+        next: Node | null
+        prev: Node | null
+
+        constructor(value:number){
+            this.value = value;
+            this.next = null;
+            this.prev = null; 
+        }
     }
 
-    export class DoublyLinkedstList{
-        start: Node | null;
-        end: Node | null; 
-        size: number; 
-        constructor(start = null, end = null, size = 0){
-            this.start = start;
-            this.end = end;
-            this.size = size; 
+    export class LinkedList {
+        head: Node | null
+        tail: Node | null
+        size: number
+
+        constructor(){
+            this.head = null;
+            this.tail = null; 
+            this.size = 0; 
         }
 
-        enqueue(val:number){
-            let newNode = new Node(val)
-            if(!this.start){
-                this.start = newNode;
-                this.end = newNode; 
+        addEnd(value:number){
+            let newNode = new Node(value)
+            if(!this.head){
+                this.head = newNode;
+                this.tail = newNode;
             } else {
-                let temp = this.end; 
-                this.end!.next = newNode;
-                this.end = newNode; 
-                this.end.prev = temp;
+                newNode.prev = this.tail
+                this.tail!.next = newNode; 
+                this.tail = newNode; 
+
             }
+
             this.size++
-        }    
+            return newNode;
+        }
 
-        dequeue():Node | undefined{
-            
-            if(!this.start){
-                return undefined
-            } else if(!this.start.next) {
-                let returnVal = this.start;
-                this.start = null; 
-                this.end = null; 
-                this.size = 0;
-                return returnVal
+        addStart(value:number){
+            let newNode = new Node(value)
+            if(!this.head){
+                this.head = newNode;
+                this.tail = newNode;
             } else {
-                let returnVal = this.start
-                this.start = this.start.next; 
-                this.start.prev = null;
-                this.size-- 
-                return returnVal; 
+                let temp = this.head;
+                this.head = newNode;
+                newNode.next = temp;
+                temp.prev = newNode; 
+            }     
+            this.size++
+            return newNode
+        }
+
+
+        addAtPosition(value: number, idx:number):Node | undefined{
+
+            if(idx > this.size) return undefined;
+            if(idx == 0) return this.addStart(value)
+            if(idx == this.size) return this.addEnd(value);
+
+            let currIdx = 0; 
+            let newNode = new Node(value)
+            let temp = this.head;
+
+            while(temp){
+                if(currIdx == idx ) break; 
+                currIdx++
+                temp = temp.next; 
             }
-            
-    }        
 
-        peekStart(val:number){}
+            let tempPrev = temp!.prev;
+            tempPrev!.next = newNode;  
+            newNode.prev = tempPrev;
+            newNode.next = temp; 
+            temp!.prev = newNode; 
 
-        peekEnd(){}
 
-        // Move any node to the front
-        MoveAnyNodeToFront(node:Node){
-            const result = this.RemoveSpecificNode(node)
-            if(!result) return
 
-            let temp = this.end
-            this.end!.next = node;
-            this.end = node; 
-            node.prev = temp; 
+            this.size++
 
-       }
+            return newNode;
+        }
+
+        deleteNodeEnd():number|undefined {
+            if(this.size ==0) return undefined
+        }
+
+        deleteNodeFront():number|undefined {
+            if(this.size ==0) return undefined
+        }
+
+
+
         
-        RemoveSpecificNode(node:Node|null):Node|undefined{
-            if(!node) return undefined;
 
-            // Doubly linkedlist is empty
-            if(!this.start && !this.end){
-                return undefined; 
-            }
-            // One node left
-            if(this.start == node && this.end == node){
-                this.start = null; 
-                this.end = null; 
-                this.size--
-                return undefined; 
-            }
-
-            if(this.start == node){
-                let temp = this.start.next;
-                temp!.prev = null; 
-                this.start = temp;
-                this.size--
-                return node; 
-            }
-
-            if(this.end == node){
-                let temp = this.end.prev;
-                this.end = temp;
-                this.size--
-                return node; 
-            }
-            
-                let left = node.prev;
-                let right = node.next;
-                left!.next = right;
-                right!.prev = left; 
-                this.size--
-                return node; 
-        }
-
-        searchNode(node:Node|null):boolean{
-            let temp = this.start;
-
-            while(temp){
-
-                if(temp == node) return true
-                temp = temp.next
-            }
-
-            return false; 
-        }
-
-        searchNodeValue(val:number):Node|undefined{
-            let temp = this.start
-
-            while(temp){
-                // node found
-                if(temp.value == val) return temp;
-                temp = temp.next
-            }
-            // Not found
-            return undefined; 
-        }
 
     }
+
+
 
 }
-
-// For the LeetCode LRU Cache, you absolutely need methods that support:
-
-// MoveAnyNodeToFront(node) → because when a key is accessed, its node must move to the head.
-
-// RemoveSpecificNode(node) → because when capacity is exceeded, you need to evict the least recently used node (tail).
-
-// Other helpers like searchByValue, searchNode, or peekStart/peekEnd are not strictly required if you manage nodes via a HashMap<Node>.
